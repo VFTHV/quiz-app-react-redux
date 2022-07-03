@@ -66,15 +66,15 @@
             )
             .map((array) => array[0]);
 
-          console.log(arrayOfSingleValues);
+          // console.log(arrayOfSingleValues);
 
           arrOfObjects = keysArr.map((key, index) => {
-            return { key: arrayOfArrays[index] };
+            return { name: key, link: arrayOfSingleValues[index] };
           });
         };
         convertObjToArr(data);
 
-        // console.log(arrOfObjects);
+        console.log(arrOfObjects);
       });
   </script>
 </html>

@@ -1,72 +1,62 @@
 import React from "react";
+import { connect } from "react-redux";
 
-const Difficulty = () => {
-  return (
-    <div>
-      <div className="row text-center">
-        <div className="col m-2 p-4 bg-success">
-          <h1>Choose quiz Difficulty</h1>
+class Difficulty extends React.Component {
+  constructor() {
+    super();
+    this.state = { difficulty: ["Easy", "Medium", "Hard"] };
+  }
+
+  handleRenderDifficulty = () => {
+    return this.state.difficulty.map((item, index) => {
+      return (
+        <li key={item} className="col-12 col-sm-4 my-2">
+          <input
+            className="btn-check"
+            type="radio"
+            name="options-outlined"
+            id={`option${index}`}
+            autoComplete="off"
+          />
+          <label
+            className="btn btn-outline-success w-100 text-start"
+            htmlFor={`option${index}`}
+          >
+            {item}
+          </label>
+        </li>
+      );
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <div className="row text-center">
+          <div className="col m-2 p-4 bg-success">
+            <h1>Choose quiz Difficulty</h1>
+          </div>
         </div>
+
+        <form>
+          <ul className="row list-unstyled">{this.handleRenderDifficulty()}</ul>
+
+          <div className="row justify-content-center">
+            <div className="col-12 col-sm-6">
+              <button type="submit" className="btn btn-dark my-2 w-100">
+                Next to the Quiz
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
+    );
+  }
+}
 
-      <form>
-        <div className="row">
-          <div className="col col-sm-6 my-2">
-            <input
-              className="btn-check"
-              type="radio"
-              name="options-outlined"
-              id="option1"
-              autoComplete="off"
-            />
-            <label
-              className="btn btn-outline-success w-100 text-start"
-              for="option1"
-            >
-              Easy
-            </label>
-          </div>
-          <div className="col col-sm-6 my-2">
-            <input
-              className="btn-check"
-              type="radio"
-              name="options-outlined"
-              id="option2"
-              autoComplete="off"
-            />
-            <label
-              className="btn btn-outline-success w-100 text-start"
-              for="option2"
-            >
-              Madium
-            </label>
-          </div>
-          <div className="col col-sm-6 my-2">
-            <input
-              className="btn-check"
-              type="radio"
-              name="options-outlined"
-              id="option3"
-              autoComplete="off"
-            />
-            <label
-              className="btn btn-outline-success w-100 text-start"
-              for="option3"
-            >
-              Hard
-            </label>
-          </div>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-6">
-            <button type="submit" className="btn btn-dark my-2 w-100">
-              Next to the Quiz
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {};
 };
 
-export default Difficulty;
+export default connect(mapStateToProps)(Difficulty);
