@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Quiz app</title>
+  </head>
+  <body>
+    <h1>Chosen category: <span id="category"></span></h1>
+
+    <h2>Question: <span id="question"></span></h2>
+
+    <p>Answer1: <span id="answer1"></span></p>
+    <p>Answer2: <span id="answer2"></span></p>
+    <p>Answer3: <span id="answer3"></span></p>
+    <p>Answer4: <span id="answer4"></span></p>
+  </body>
+  <script>
+    const questionsURL =
+      "https://the-trivia-api.com/api/questions?categories=science&limit=2";
+
+    let responseData = [];
+
+    const fetchQuestions = fetch(questionsURL, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        responseData = data;
+        assignQuestion(data);
+      });
+
+    function assignQuestion(data) {
+      const question1 = data[0];
+
+      document.getElementById("category").innerText = question1.category;
+      document.getElementById("question").innerText = question1.question;
+      document.getElementById("answer1").innerText = question1.correctAnswer;
+      document.getElementById("answer2").innerText =
+        question1.incorrectAnswers[0];
+      document.getElementById("answer3").innerText =
+        question1.incorrectAnswers[1];
+      document.getElementById("answer4").innerText =
+        question1.incorrectAnswers[2];
+    }
+    // console.log(responseData);
+
+    const categoriesURL = "https://the-trivia-api.com/api/categories";
+
+    const fetchCategories = fetch(categoriesURL, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  </script>
+</html>
