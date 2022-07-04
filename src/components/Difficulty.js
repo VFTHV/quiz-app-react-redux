@@ -1,10 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
+import { chooseDifficulty, changePage } from "../actions";
 
 class Difficulty extends React.Component {
   constructor() {
     super();
-    this.state = { difficulty: ["Easy", "Medium", "Hard"] };
+    this.state = {
+      difficulty: ["Easy", "Medium", "Hard"],
+      selectedDifficulty: "",
+    };
   }
 
   handleRenderDifficulty = () => {
@@ -17,6 +21,10 @@ class Difficulty extends React.Component {
             name="options-outlined"
             id={`option${index}`}
             autoComplete="off"
+            onChange={() =>
+              this.setState({ selectedDifficulty: item.toLowerCase() })
+            }
+            required
           />
           <label
             className="btn btn-outline-success w-100 text-start"
@@ -29,16 +37,26 @@ class Difficulty extends React.Component {
     });
   };
 
+  handleDifficultySubmit = (e) => {
+    e.preventDefault();
+    if (this.state.selectedDifficulty === "") {
+      return;
+    }
+    this.props.chooseDifficulty(this.state.selectedDifficulty);
+    this.props.changePage("quiz");
+  };
+
   render() {
     return (
       <div>
+        {console.log(this.state)}
         <div className="row text-center">
           <div className="col m-2 p-4 bg-success">
             <h1>Choose quiz Difficulty</h1>
           </div>
         </div>
 
-        <form>
+        <form onSubmit={this.handleDifficultySubmit}>
           <ul className="row list-unstyled">{this.handleRenderDifficulty()}</ul>
 
           <div className="row justify-content-center">
@@ -55,8 +73,9 @@ class Difficulty extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {};
 };
 
-export default connect(mapStateToProps)(Difficulty);
+export default connect(mapStateToProps, { chooseDifficulty, changePage })(
+  Difficulty
+);

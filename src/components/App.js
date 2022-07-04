@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Category from "./Category";
 import Difficulty from "./Difficulty";
-import Question from "./Question";
+import Quiz from "./Quiz";
 
 class App extends React.Component {
   handleRenderPages = (pageName) => {
@@ -12,8 +12,8 @@ class App extends React.Component {
     if (pageName === "difficulty") {
       return <Difficulty />;
     }
-    if (pageName === "question") {
-      return <Question />;
+    if (pageName === "quiz") {
+      return <Quiz />;
     }
   };
 
@@ -21,17 +21,13 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         {this.handleRenderPages(this.props.changePage)}
-
-        {/* <Category />
-        <Difficulty />
-        <Question /> */}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return { changePage: state.changePage };
+  return { changePage: state.pageName };
 };
 
 export default connect(mapStateToProps)(App);

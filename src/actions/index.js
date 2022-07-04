@@ -17,9 +17,25 @@ export const chooseCategory = (path) => {
   };
 };
 
+export const chooseDifficulty = (path) => {
+  return {
+    type: "CHOOSE_DIFFICULTY",
+    payload: path,
+  };
+};
+
 export const changePage = (pageName) => {
   return {
     type: "CHANGE_PAGE",
     payload: pageName,
   };
+};
+
+export const fetchQuiz = (quizLink) => async (dispatch) => {
+  const response = await triviaApi.get(quizLink);
+
+  dispatch({
+    type: "FETCH_QUIZ",
+    payload: response.data,
+  });
 };
