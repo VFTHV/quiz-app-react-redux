@@ -1,120 +1,130 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchQuiz } from "../actions";
+import Submit from "./Submit";
+import Question from "./Question";
 
 class Quiz extends Component {
-  state = { questionNumber: 0 };
+  state = {
+    questionNumber: 0,
+    selectedAnswer: "",
+    correctAnswers: 0,
+    shuffledArray: [],
+    isCorrectAnswer: null,
+    checkAnswer: false,
+  };
 
   componentDidMount() {
     this.props.fetchQuiz(this.props.quizLink);
+    const shuffledArray = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+    this.setState({ shuffledArray });
+  }
+
+  componentDidUpdate() {
+    if (this.state.checkAnswer) {
+      setTimeout(() => {
+        const shuffledArray = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+        this.setState({
+          shuffledArray,
+          checkAnswer: false,
+          questionNumber: this.state.questionNumber + 1,
+        });
+      }, 3000);
+    }
   }
 
   handleQuestionSubmit = (e) => {
     e.preventDefault();
-    this.setState({ questionNumber: this.state.questionNumber + 1 });
-  };
-
-  handleQuestionRender = () => {
-    if (this.props.quiz.length === 0) {
-      return;
+    if (
+      this.state.selectedAnswer ===
+      this.props.quiz[this.state.questionNumber].correctAnswer
+    ) {
+      console.log("answer is correct");
+      this.setState({
+        correctAnswers: this.state.correctAnswers + 1,
+        isCorrectAnswer: true,
+        checkAnswer: true,
+      });
+    } else {
+      this.setState({
+        isCorrectAnswer: false,
+        checkAnswer: true,
+      });
+      console.log("answer is wrong");
     }
-    const currentQuestion = this.props.quiz[this.state.questionNumber];
-
-    return (
-      <div className="col m-2 p-4 bg-success">
-        <h1>{currentQuestion.question}</h1>;{console.log(this.props.quiz)}
-        <h4>
-          Question {this.state.questionNumber + 1} out of{" "}
-          {this.props.quiz.length}
-        </h4>
-      </div>
-    );
   };
 
   handleAnswersRender = () => {
+    if (this.props.quiz.length === 0) {
+      return;
+    }
     const currentQuestion = this.props.quiz[this.state.questionNumber];
     const allAnswers = [
       ...currentQuestion.incorrectAnswers,
       currentQuestion.correctAnswer,
     ];
-    console.log(allAnswers);
+    const shuffledAnswers = [];
+    this.state.shuffledArray.forEach((item, index) => {
+      shuffledAnswers[item] = allAnswers[index];
+    });
+    console.log(currentQuestion);
+
+    return (
+      <ul className="row list-unstyled">
+        {shuffledAnswers.map((answer, index) => {
+          return (
+            <li key={answer} className="col-12 col-sm-6 my-2">
+              <input
+                className="btn-check"
+                type="radio"
+                name="options-outlined"
+                id={`option${index}`}
+                autoComplete="off"
+                onChange={() => {
+                  this.setState({ selectedAnswer: answer });
+                }}
+                required
+              />
+
+              <label
+                className="btn btn-outline-success w-100 text-start"
+                htmlFor={`option${index}`}
+              >
+                {answer}
+              </label>
+            </li>
+          );
+        })}
+      </ul>
+    );
   };
+
+  handleCheckAnswer() {
+    if (this.state.checkAnswer) {
+      if (this.state.isCorrectAnswer) {
+        return "Your answer is correct";
+      } else {
+        return "Your answer is incorrect";
+      }
+    }
+  }
 
   render() {
     return (
       <div>
-        <div className="row text-center">{this.handleQuestionRender()}</div>
-
+        {console.log(this.state.selectedAnswer)}
+        <div className="row text-center">
+          <Question
+            number={this.state.questionNumber + 1}
+            totalQuestions={this.props.quiz.length}
+            currentQuestion={this.props.quiz[this.state.questionNumber]}
+          />
+          <h2>{this.handleCheckAnswer()}</h2>
+          <h5>Correct answers: {this.state.correctAnswers}</h5>
+        </div>
         <form onSubmit={this.handleQuestionSubmit}>
-          <div className="row">
-            <div className="col-12 col-sm-6 my-2">
-              <input
-                className="btn-check"
-                type="radio"
-                name="options-outlined"
-                id="option1"
-                autoComplete="off"
-              />
-              <label
-                className="btn btn-outline-success w-100 text-start"
-                htmlFor="option1"
-              >
-                Option1
-              </label>
-            </div>
-            <div className="col-12 col-sm-6 my-2">
-              <input
-                className="btn-check"
-                type="radio"
-                name="options-outlined"
-                id="option2"
-                autoComplete="off"
-              />
-              <label
-                className="btn btn-outline-success w-100 text-start"
-                htmlFor="option2"
-              >
-                Option1
-              </label>
-            </div>
-            <div className="col-12 col-sm-6 my-2">
-              <input
-                className="btn-check"
-                type="radio"
-                name="options-outlined"
-                id="option3"
-                autoComplete="off"
-              />
-              <label
-                className="btn btn-outline-success w-100 text-start"
-                htmlFor="option3"
-              >
-                Option1
-              </label>
-            </div>
-            <div className="col-12 col-sm-6 my-2">
-              <input
-                className="btn-check"
-                type="radio"
-                name="options-outlined"
-                id="option4"
-                autoComplete="off"
-              />
-              <label
-                className="btn btn-outline-success w-100 text-start"
-                htmlFor="option4"
-              >
-                Option1
-              </label>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-12 col-sm-6">
-              <button type="submit" className="btn btn-dark my-2 w-100">
-                Submit answer
-              </button>
-            </div>
-          </div>
+          {this.handleAnswersRender()}
+          <Submit text="Next Question" />
         </form>
       </div>
     );
@@ -122,7 +132,6 @@ class Quiz extends Component {
 }
 
 const mapStateToProps = (state) => {
-  // console.log(state.quiz);
   return { quizLink: state.quizLink, quiz: state.quiz };
 };
 

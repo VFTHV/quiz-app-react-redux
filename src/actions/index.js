@@ -1,3 +1,4 @@
+// import _ from "lodash";
 import triviaApi from "../apis/triviaApi";
 import convertObjToArray from "./convertObjToArray";
 
@@ -39,3 +40,16 @@ export const fetchQuiz = (quizLink) => async (dispatch) => {
     payload: response.data,
   });
 };
+
+// export const fetchQuiz = (quizLink) => (dispatch) => {
+//   console.log("fetching quiz with memoize");
+//   _fetchQuiz(quizLink, dispatch);
+// };
+
+// const _fetchQuiz = _.memoize(async (quizLink, dispatch) => {
+//   const response = await triviaApi.get(quizLink);
+//   dispatch({
+//     type: "FETCH_QUIZ",
+//     payload: response.data,
+//   });
+// });

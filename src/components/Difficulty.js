@@ -49,7 +49,6 @@ class Difficulty extends React.Component {
   render() {
     return (
       <div>
-        {console.log(this.state)}
         <div className="row text-center">
           <div className="col m-2 p-4 bg-success">
             <h1>Choose quiz Difficulty</h1>

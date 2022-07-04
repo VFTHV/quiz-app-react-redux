@@ -48,7 +48,7 @@ class Category extends React.Component {
             <h1>Choose quiz Category</h1>
           </div>
         </div>
-        {/* {console.log(this.state.category)} */}
+
         <form onSubmit={this.handleCategorySubmit}>
           <ul className="row list-unstyled">{this.handleRenderList()}</ul>
 
@@ -66,7 +66,6 @@ class Category extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return { categories: state.categories };
 };
 
