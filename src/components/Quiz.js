@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchQuiz } from "../actions";
+import { fetchQuiz, changePage, addCorrectAnswer } from "../actions";
 import Submit from "./Submit";
 import Question from "./Question";
 
@@ -8,7 +8,6 @@ class Quiz extends Component {
   state = {
     questionNumber: 0,
     selectedAnswer: "",
-    correctAnswers: 0,
     shuffledArray: [],
     isCorrectAnswer: null,
     checkAnswer: false,
@@ -29,7 +28,15 @@ class Quiz extends Component {
           checkAnswer: false,
           questionNumber: this.state.questionNumber + 1,
         });
-      }, 3000);
+      }, 2000);
+    }
+
+    if (
+      this.state.questionNumber === this.props.quiz.length &&
+      this.state.questionNumber !== 0
+    ) {
+      this.props.changePage("result");
+      return;
     }
   }
 
@@ -40,8 +47,8 @@ class Quiz extends Component {
       this.props.quiz[this.state.questionNumber].correctAnswer
     ) {
       console.log("answer is correct");
+      this.props.addCorrectAnswer(this.props.correctAnswers);
       this.setState({
-        correctAnswers: this.state.correctAnswers + 1,
         isCorrectAnswer: true,
         checkAnswer: true,
       });
@@ -67,7 +74,6 @@ class Quiz extends Component {
     this.state.shuffledArray.forEach((item, index) => {
       shuffledAnswers[item] = allAnswers[index];
     });
-    console.log(currentQuestion);
 
     return (
       <ul className="row list-unstyled">
@@ -110,9 +116,11 @@ class Quiz extends Component {
   }
 
   render() {
+    if (this.state.questionNumber === this.props.quiz.length) {
+      return;
+    }
     return (
       <div>
-        {console.log(this.state.selectedAnswer)}
         <div className="row text-center">
           <Question
             number={this.state.questionNumber + 1}
@@ -120,11 +128,11 @@ class Quiz extends Component {
             currentQuestion={this.props.quiz[this.state.questionNumber]}
           />
           <h2>{this.handleCheckAnswer()}</h2>
-          <h5>Correct answers: {this.state.correctAnswers}</h5>
+          <h5>Correct answers: {this.props.correctAnswers}</h5>
         </div>
         <form onSubmit={this.handleQuestionSubmit}>
           {this.handleAnswersRender()}
-          <Submit text="Next Question" />
+          {this.state.checkAnswer ? null : <Submit text="Next Question" />}
         </form>
       </div>
     );
@@ -132,7 +140,15 @@ class Quiz extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { quizLink: state.quizLink, quiz: state.quiz };
+  return {
+    quizLink: state.quizLink,
+    quiz: state.quiz,
+    correctAnswers: state.correctAnswers,
+  };
 };
 
-export default connect(mapStateToProps, { fetchQuiz })(Quiz);
+export default connect(mapStateToProps, {
+  fetchQuiz,
+  changePage,
+  addCorrectAnswer,
+})(Quiz);

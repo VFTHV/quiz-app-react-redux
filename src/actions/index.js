@@ -32,6 +32,13 @@ export const changePage = (pageName) => {
   };
 };
 
+export const addCorrectAnswer = (answer) => {
+  return {
+    type: "ADD_CORRECT_ANSWER",
+    payload: answer,
+  };
+};
+
 export const fetchQuiz = (quizLink) => async (dispatch) => {
   const response = await triviaApi.get(quizLink);
 

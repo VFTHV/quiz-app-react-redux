@@ -3,17 +3,19 @@ import { connect } from "react-redux";
 import Category from "./Category";
 import Difficulty from "./Difficulty";
 import Quiz from "./Quiz";
+import Result from "./Result";
 
 class App extends React.Component {
   handleRenderPages = (pageName) => {
-    if (pageName === "") {
-      return <Category />;
-    }
-    if (pageName === "difficulty") {
-      return <Difficulty />;
-    }
-    if (pageName === "quiz") {
-      return <Quiz />;
+    switch (pageName) {
+      case "difficulty":
+        return <Difficulty />;
+      case "quiz":
+        return <Quiz />;
+      case "result":
+        return <Result />;
+      default:
+        return <Category />;
     }
   };
 
