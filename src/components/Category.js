@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchCategories, chooseCategory, changePage } from "../actions";
+import Submit from "./Submit";
 
 class Category extends React.Component {
   componentDidMount() {
@@ -50,15 +51,17 @@ class Category extends React.Component {
         </div>
 
         <form onSubmit={this.handleCategorySubmit}>
-          <ul className="row list-unstyled">{this.handleRenderList()}</ul>
+          <ul className="row list-unstyled">
+            {this.props.categories.length === 0 ? (
+              <div className="text-center fs-4">Loading...</div>
+            ) : (
+              this.handleRenderList()
+            )}
+          </ul>
 
-          <div className="row justify-content-center">
-            <div className="col-12 col-sm-6 col-lg-4 ">
-              <button type="submit" className="btn btn-dark my-2 w-100">
-                Next to choose difficulty
-              </button>
-            </div>
-          </div>
+          {this.props.categories.length === 0 ? null : (
+            <Submit text="Next to choose difficulty" />
+          )}
         </form>
       </div>
     );

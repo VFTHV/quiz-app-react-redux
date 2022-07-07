@@ -131,7 +131,7 @@ class Quiz extends Component {
           <h5>Correct answers: {this.props.correctAnswers}</h5>
         </div>
         <form onSubmit={this.handleQuestionSubmit}>
-          {this.handleAnswersRender()}
+          {this.state.checkAnswer ? null : this.handleAnswersRender()}
           {this.state.checkAnswer ? null : <Submit text="Next Question" />}
         </form>
       </div>

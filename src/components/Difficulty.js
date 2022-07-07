@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { chooseDifficulty, changePage } from "../actions";
+import Submit from "./Submit";
 
 class Difficulty extends React.Component {
   constructor() {
@@ -57,14 +58,7 @@ class Difficulty extends React.Component {
 
         <form onSubmit={this.handleDifficultySubmit}>
           <ul className="row list-unstyled">{this.handleRenderDifficulty()}</ul>
-
-          <div className="row justify-content-center">
-            <div className="col-12 col-sm-6">
-              <button type="submit" className="btn btn-dark my-2 w-100">
-                Next to the Quiz
-              </button>
-            </div>
-          </div>
+          <Submit text="Next to the Quiz" />
         </form>
       </div>
     );
